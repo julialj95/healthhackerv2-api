@@ -8,8 +8,5 @@ CREATE TABLE logs (
   sleep_quality INTEGER, 
   exercise_type TEXT,
   exercise_minutes INTEGER,
-  notes TEXT ,
-  goal_1 TEXT,
-  goal_2 TEXT,
-  goal_3 TEXT,
+  notes TEXT
   }
