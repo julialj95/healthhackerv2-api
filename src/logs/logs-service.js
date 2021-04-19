@@ -11,7 +11,7 @@ const LogsService = {
       .returning("*")
       .then((rows) => rows[0]);
   },
-  editLog(knex, updatedLog, id) {
+  editLog(knex, id, updatedLog) {
     return knex.from("logs").where("id", id).update(updatedLog);
   },
   deleteLog(knex, id) {
