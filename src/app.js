@@ -8,6 +8,7 @@ const errorHandler = require("./errorHandler");
 const authorizationRouter = require("./Authorization/authorization-router.js");
 const UsersRouter = require("./users/users-router");
 const LogsRouter = require("./logs/logs-router");
+const GoalsRouter = require("./goals/goals-router");
 const app = express();
 
 const morganOption = NODE_ENV === "production" ? "tiny" : "common";
@@ -31,4 +32,5 @@ app.use(errorHandler);
 app.use("/api/authorization", authorizationRouter);
 app.use("/api/users", UsersRouter);
 app.use("/api/logs", LogsRouter);
+app.use("/api/goals", GoalsRouter);
 module.exports = app;

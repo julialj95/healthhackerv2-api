@@ -1,4 +1,7 @@
 const LogsService = {
+  getLogById(knex, id) {
+    return knex.select("*").from("logs").where({ id }).first();
+  },
   getAllLogsForUser(knex, user_id) {
     return knex.select("*").from("logs").where("user_id", user_id);
   },

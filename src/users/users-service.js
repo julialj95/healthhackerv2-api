@@ -38,6 +38,9 @@ const usersService = {
   getUserByUsername(knex, username) {
     return knex.select("*").from("users").where({ username }).first();
   },
+  getUserById(knex, id) {
+    return knex.select("*").from("users").where({ id }).first();
+  },
 };
 
 module.exports = usersService;

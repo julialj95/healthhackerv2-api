@@ -6,6 +6,18 @@ const { requireAuth } = require("../middleware/jwt-auth");
 const jsonParser = express.json();
 const LogsRouter = express.Router();
 
+serializeLog = (newLog) => ({
+  id: newLog.id,
+  user_id: newLog.user_id,
+  log_date: newLog.log_date,
+  mood: newLog.mood,
+  stress: newLog.stress,
+  sleep_hours: newLog.stress,
+  sleep_quality: newLog.sleep_quality,
+  exercise_type: xss(newLog.exercise_type),
+  exercise_minutes: newLog.exercise_minutes,
+  notes: xss(newLog.notes),
+});
 LogsRouter.route("/")
   // .all((req, res, next) => {
   //   res.log = log;
@@ -13,7 +25,7 @@ LogsRouter.route("/")
   // })
   .get(requireAuth, (req, res, next) => {
     const { user_id } = req.user.id;
-    LogsService.getAllLogsForUser(req.app.get("db"), id)
+    LogsService.getAllLogsForUser(req.app.get("db"), user_id)
       .then((logs) => {
         if (!logs) {
           return res.status(400).send("No logs found.");
@@ -23,7 +35,8 @@ LogsRouter.route("/")
       .catch(next);
   })
   .post(requireAuth, jsonParser, (req, res, next) => {
-    const { user_id } = req.user.id;
+    const user_id = req.user.id;
+
     const {
       log_date,
       mood,
@@ -46,13 +59,20 @@ LogsRouter.route("/")
       notes,
     };
 
-    LogsService.createNewLog(req.app.get("db"), newLog).then(response);
+    LogsService.createNewLog(req.app.get("db"), newLog)
+      .then((log) => {
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `/${user_id}`))
+          .json(serializeLog(log));
+      })
+      .catch(next);
   });
 
 LogsRouter.route("/:log_id")
   .all(requireAuth, (req, res, next) => {
     const { log_id } = req.params;
-    ResourcesService.getLogById(req.app.get("db"), log_id).then((log) => {
+    LogsService.getLogById(req.app.get("db"), log_id).then((log) => {
       if (!log) {
         return res.status(404).json({
           error: { message: `Log doesn't exist` },
@@ -64,8 +84,8 @@ LogsRouter.route("/:log_id")
   })
 
   .patch(requireAuth, (req, res, next) => {
+    const user_id = req.user.id;
     const {
-      user_id,
       log_date,
       mood,
       stress,
@@ -77,8 +97,8 @@ LogsRouter.route("/:log_id")
     } = req.body;
     const log_id = log.id;
     const updatedLog = {
-      log_id,
       user_id,
+      log_id,
       log_date,
       mood,
       stress,
@@ -96,7 +116,11 @@ LogsRouter.route("/:log_id")
       .catch(next);
   })
   .delete(requireAuth, (req, res, next) => {
-    const id = log.id;
+    LogsService.deleteLog(req.app.get("db"), log.id)
+      .then(() => {
+        res.status(204).end();
+      })
+      .catch(next);
   });
 
 module.exports = LogsRouter;

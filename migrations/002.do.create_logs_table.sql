@@ -9,4 +9,4 @@ CREATE TABLE logs (
   exercise_type TEXT,
   exercise_minutes INTEGER,
   notes TEXT
-  }
+)
