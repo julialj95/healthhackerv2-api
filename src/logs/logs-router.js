@@ -24,7 +24,8 @@ LogsRouter.route("/")
   //   next();
   // })
   .get(requireAuth, (req, res, next) => {
-    const { user_id } = req.user.id;
+    const user_id = req.user.id;
+
     LogsService.getAllLogsForUser(req.app.get("db"), user_id)
       .then((logs) => {
         if (!logs) {
@@ -61,6 +62,7 @@ LogsRouter.route("/")
 
     LogsService.createNewLog(req.app.get("db"), newLog)
       .then((log) => {
+        console.log("log added");
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${user_id}`))
@@ -81,6 +83,9 @@ LogsRouter.route("/:log_id")
       res.log = log;
       next();
     });
+  })
+  .get((req, res, next) => {
+    res.json(serializeLog(res.log));
   })
 
   .patch(requireAuth, (req, res, next) => {
@@ -116,7 +121,7 @@ LogsRouter.route("/:log_id")
       .catch(next);
   })
   .delete(requireAuth, (req, res, next) => {
-    LogsService.deleteLog(req.app.get("db"), log.id)
+    LogsService.deleteLog(req.app.get("db"), res.log.id)
       .then(() => {
         res.status(204).end();
       })

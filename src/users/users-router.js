@@ -2,7 +2,6 @@ const express = require("express");
 const xss = require("xss");
 const path = require("path");
 const UsersService = require("./users-service");
-const { hashedPassword } = require("./users-service");
 const jsonParser = express.json();
 const UsersRouter = express.Router();
 
@@ -19,6 +18,7 @@ UsersRouter.route("/")
   })
   .post(jsonParser, (req, res, next) => {
     const { username, password } = req.body;
+    console.log("username, password", username, password);
 
     for (const field of ["username", "password"]) {
       if (!req.body[field]) {
@@ -48,15 +48,17 @@ UsersRouter.route("/")
           password: hashedPassword,
         };
 
-        UsersService.createNewUser(req.app.get("db"), newUser).then((user) => {
-          return res
-            .status(201)
-            .location(path.posix.join(req.originalUrl, `/${user.id}`))
-            .json({
-              id: user.id,
-              username: xss(user.username),
-            });
-        });
+        UsersService.createNewUser(req.app.get("db"), newUser)
+          .then((user) => {
+            return res
+              .status(201)
+              .location(path.posix.join(req.originalUrl, `/${user.id}`))
+              .json({
+                id: user.id,
+                username: xss(user.username),
+              });
+          })
+          .catch(next);
       })
       .catch(next);
   });
