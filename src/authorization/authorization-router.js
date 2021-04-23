@@ -19,9 +19,10 @@ authorizationRouter.post("/login", jsonBodyParser, (req, res, next) => {
     loginUser.username
   )
     .then((user) => {
+      console.log("user", user);
       if (!user)
         return res.status(400).json({
-          error: "Incorrect username or password",
+          error: { message: "Incorrect username or password" },
         });
 
       return AuthorizationService.comparePasswords(
@@ -30,7 +31,7 @@ authorizationRouter.post("/login", jsonBodyParser, (req, res, next) => {
       ).then((compareMatch) => {
         if (!compareMatch)
           return res.status(400).json({
-            error: "Incorrect username or password",
+            error: { message: "Incorrect username or password" },
           });
 
         const sub = user.username;

@@ -12,7 +12,7 @@ const LogsService = {
     return knex("logs")
       .insert(newLog)
       .returning("*")
-      .then((rows) => rows[0]);
+      .then((response) => response[0]);
   },
   editLog(knex, id, updatedLog) {
     return knex.from("logs").where("id", id).update(updatedLog);

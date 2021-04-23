@@ -37,7 +37,7 @@ LogsRouter.route("/")
   })
   .post(requireAuth, jsonParser, (req, res, next) => {
     const user_id = req.user.id;
-
+    console.log(user_id);
     const {
       log_date,
       mood,
@@ -46,6 +46,7 @@ LogsRouter.route("/")
       sleep_quality,
       exercise_type,
       exercise_minutes,
+      water,
       notes,
     } = req.body;
     const newLog = {
@@ -57,12 +58,15 @@ LogsRouter.route("/")
       sleep_quality,
       exercise_type,
       exercise_minutes,
+      water,
       notes,
     };
-
+    // console.log("log_date", log_date);
+    // console.log("newlog", newLog);
     LogsService.createNewLog(req.app.get("db"), newLog)
       .then((log) => {
         console.log("log added");
+        console.log("log", log);
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${user_id}`))
@@ -98,6 +102,7 @@ LogsRouter.route("/:log_id")
       sleep_quality,
       exercise_type,
       exercise_minutes,
+      water,
       notes,
     } = req.body;
     const log_id = log.id;
@@ -111,6 +116,7 @@ LogsRouter.route("/:log_id")
       sleep_quality,
       exercise_type,
       exercise_minutes,
+      water,
       notes,
     };
 
