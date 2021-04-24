@@ -16,6 +16,7 @@ serializeLog = (newLog) => ({
   sleep_quality: newLog.sleep_quality,
   exercise_type: xss(newLog.exercise_type),
   exercise_minutes: newLog.exercise_minutes,
+  water: newLog.water,
   notes: xss(newLog.notes),
 });
 LogsRouter.route("/")
@@ -61,7 +62,7 @@ LogsRouter.route("/")
       water,
       notes,
     };
-    // console.log("log_date", log_date);
+    console.log("log_date", log_date);
     // console.log("newlog", newLog);
     LogsService.createNewLog(req.app.get("db"), newLog)
       .then((log) => {
@@ -92,7 +93,7 @@ LogsRouter.route("/:log_id")
     res.json(serializeLog(res.log));
   })
 
-  .patch(requireAuth, (req, res, next) => {
+  .patch(requireAuth, jsonParser, (req, res, next) => {
     const user_id = req.user.id;
     const {
       log_date,
@@ -105,10 +106,9 @@ LogsRouter.route("/:log_id")
       water,
       notes,
     } = req.body;
-    const log_id = log.id;
+    const log_id = req.params.log_id;
     const updatedLog = {
       user_id,
-      log_id,
       log_date,
       mood,
       stress,
@@ -119,9 +119,9 @@ LogsRouter.route("/:log_id")
       water,
       notes,
     };
-
+    console.log("updatedLog", updatedLog);
     LogsService.editLog(req.app.get("db"), log_id, updatedLog)
-      .then((res) => {
+      .then(() => {
         res.status(204).end();
       })
       .catch(next);
