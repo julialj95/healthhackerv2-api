@@ -12,7 +12,7 @@ serializeLog = (newLog) => ({
   log_date: newLog.log_date,
   mood: newLog.mood,
   stress: newLog.stress,
-  sleep_hours: newLog.stress,
+  sleep_hours: newLog.sleep_hours,
   sleep_quality: newLog.sleep_quality,
   exercise_type: xss(newLog.exercise_type),
   exercise_minutes: newLog.exercise_minutes,
@@ -38,7 +38,7 @@ LogsRouter.route("/")
   })
   .post(requireAuth, jsonParser, (req, res, next) => {
     const user_id = req.user.id;
-    console.log(user_id);
+
     const {
       log_date,
       mood,
@@ -62,12 +62,9 @@ LogsRouter.route("/")
       water,
       notes,
     };
-    console.log("log_date", log_date);
-    // console.log("newlog", newLog);
+
     LogsService.createNewLog(req.app.get("db"), newLog)
       .then((log) => {
-        console.log("log added");
-        console.log("log", log);
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${user_id}`))
@@ -119,7 +116,7 @@ LogsRouter.route("/:log_id")
       water,
       notes,
     };
-    console.log("updatedLog", updatedLog);
+
     LogsService.editLog(req.app.get("db"), log_id, updatedLog)
       .then(() => {
         res.status(204).end();

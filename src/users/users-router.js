@@ -18,7 +18,6 @@ UsersRouter.route("/")
   })
   .post(jsonParser, (req, res, next) => {
     const { username, password } = req.body;
-    console.log("username, password", username, password);
 
     for (const field of ["username", "password"]) {
       if (!req.body[field]) {

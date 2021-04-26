@@ -19,7 +19,6 @@ authorizationRouter.post("/login", jsonBodyParser, (req, res, next) => {
     loginUser.username
   )
     .then((user) => {
-      console.log("user", user);
       if (!user)
         return res.status(400).json({
           error: { message: "Incorrect username or password" },
