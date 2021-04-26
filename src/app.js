@@ -21,6 +21,12 @@ app.get("/", (req, res) => {
   res.send("Hello, world!");
 });
 
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN,
+  })
+);
+
 app.use(errorHandler);
 
 app.use("/api/authorization", authorizationRouter);
