@@ -21,7 +21,11 @@ app.get("/", (req, res) => {
   res.send("Hello, world!");
 });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use(errorHandler);
 
