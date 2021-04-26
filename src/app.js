@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 
 app.use(
   cors({
-    origin: "*",
+    origin: CLIENT_ORIGIN,
   })
 );
 
