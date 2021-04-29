@@ -13,11 +13,11 @@ serializeLog = (newLog) => ({
   log_date: newLog.log_date,
   mood: newLog.mood,
   stress: newLog.stress,
-  sleep_hours: xss(newLog.sleep_hours),
+  sleep_hours: newLog.sleep_hours,
   sleep_quality: newLog.sleep_quality,
   exercise_type: xss(newLog.exercise_type),
-  exercise_minutes: xss(newLog.exercise_minutes),
-  water: xss(newLog.water),
+  exercise_minutes: newLog.exercise_minutes,
+  water: newLog.water,
   notes: xss(newLog.notes),
 });
 

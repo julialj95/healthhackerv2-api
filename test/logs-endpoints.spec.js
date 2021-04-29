@@ -1,6 +1,7 @@
 const knex = require("knex");
 const jwt = require("jsonwebtoken");
 const app = require("../src/app");
+const moment = require("moment");
 const { makeLogsArray } = require("./logs-fixture");
 const { makeUsersArray } = require("./users-fixture");
 const supertest = require("supertest");
@@ -72,14 +73,15 @@ describe("Logs endpoints", function () {
 
       it("Returns 201 and creates the new log", () => {
         const newLog = {
-          log_date: "04/27/2021",
+          user_id: 1,
+          log_date: "2021-04-24",
           mood: 5,
           stress: 3,
           sleep_hours: 7.5,
           sleep_quality: 5,
           exercise_type: "Biking",
           exercise_minutes: 45,
-          notes: 60,
+          water: 60,
           notes: "Notes Test",
         };
 
@@ -90,12 +92,12 @@ describe("Logs endpoints", function () {
           .expect(201)
           .expect((res) => {
             expect(res.body.user_id).to.eql(newLog.user_id);
-            expect(res.body.log_date).to.eql(
+            expect(moment(res.body.log_date).format("YYYY-MM-DD")).to.eql(
               moment(newLog.log_date).format("YYYY-MM-DD")
             );
             expect(res.body.mood).to.eql(newLog.mood);
             expect(res.body.stress).to.eql(newLog.stress);
-            expect(res.body.sleep_hours).to.eql(newLog.sleep_hours);
+            expect(parseFloat(res.body.sleep_hours)).to.eql(newLog.sleep_hours);
             expect(res.body.sleep_quality).to.eql(newLog.sleep_quality);
             expect(res.body.exercise_type).to.eql(newLog.exercise_type);
             expect(res.body.exercise_minutes).to.eql(newLog.exercise_minutes);
@@ -137,7 +139,7 @@ describe("Logs endpoints", function () {
         const updatedLog = {
           id: 4,
           user_id: 3,
-          log_date: 2021 - 04 - 27,
+          log_date: "2021-04-27",
           mood: 4,
           stress: 3,
           sleep_hours: 7.5,
