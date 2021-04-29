@@ -137,8 +137,8 @@ describe("Logs endpoints", function () {
       it("Updates the log and returns 204", () => {
         const idToUpdate = 2;
         const updatedLog = {
-          id: 4,
-          user_id: 3,
+          id: 2,
+          user_id: 1,
           log_date: "2021-04-27",
           mood: 4,
           stress: 3,
@@ -146,12 +146,22 @@ describe("Logs endpoints", function () {
           sleep_quality: 4,
           exercise_type: "Biking",
           exercise_minutes: 45,
-          notes: 60,
+          water: 60,
           notes: "Updated Notes Test",
         };
-        const expectedLog = {
-          ...testLogs[idToUpdate - 1],
-          ...updatedLog,
+
+        const expected = {
+          id: 2,
+          user_id: 1,
+          log_date: "2021-04-27T05:00:00.000Z",
+          mood: 4,
+          stress: 3,
+          sleep_hours: "7.5",
+          sleep_quality: 4,
+          exercise_type: "Biking",
+          exercise_minutes: 45,
+          water: 60,
+          notes: "Updated Notes Test",
         };
 
         return supertest(app)
@@ -163,7 +173,7 @@ describe("Logs endpoints", function () {
             return supertest(app)
               .get(`/api/logs/${idToUpdate}`)
               .set("Authorization", makeAuthHeader(testUsers[0]))
-              .expect(expectedLog);
+              .expect(expected);
           });
       });
     });
