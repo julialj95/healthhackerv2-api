@@ -5,6 +5,7 @@ const LogsService = require("./logs-service");
 const { requireAuth } = require("../middleware/jwt-auth");
 const jsonParser = express.json();
 const LogsRouter = express.Router();
+const moment = require("moment");
 
 serializeLog = (newLog) => ({
   id: newLog.id,
@@ -19,6 +20,25 @@ serializeLog = (newLog) => ({
   water: newLog.water,
   notes: xss(newLog.notes),
 });
+
+formatLogs = (logs) => {
+  return logs.map((log) => {
+    return {
+      id: log.id,
+      user_id: log.user_id,
+      log_date: moment(log.log_date).format("YYYY-MM-DD"),
+      mood: log.mood,
+      stress: log.stress,
+      sleep_hours: parseFloat(log.sleep_hours),
+      sleep_quality: log.sleep_quality,
+      exercise_type: log.exercise_type,
+      exercise_minutes: log.exercise_minutes,
+      water: log.water,
+      notes: log.notes,
+    };
+  });
+};
+
 LogsRouter.route("/")
   // .all((req, res, next) => {
   //   res.log = log;
@@ -32,7 +52,7 @@ LogsRouter.route("/")
         if (!logs) {
           return res.status(400).send("No logs found.");
         }
-        res.json(logs);
+        res.json(formatLogs(logs));
       })
       .catch(next);
   })
