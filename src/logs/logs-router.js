@@ -40,10 +40,6 @@ formatLogs = (logs) => {
 };
 
 LogsRouter.route("/")
-  // .all((req, res, next) => {
-  //   res.log = log;
-  //   next();
-  // })
   .get(requireAuth, (req, res, next) => {
     const user_id = req.user.id;
 

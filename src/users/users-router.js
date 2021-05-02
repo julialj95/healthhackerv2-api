@@ -70,8 +70,6 @@ UsersRouter.route("/:id").all((req, res, next) => {
       });
     }
     res.json(user);
-    // res.user = user;
-    // next();
   });
 });
 
