@@ -83,6 +83,25 @@ LogsRouter.route("/")
       notes,
     };
 
+    if (!mood) {
+      delete newLog.mood;
+    }
+    if (!stress) {
+      delete newLog.stress;
+    }
+    if (!sleep_hours) {
+      delete newLog.sleep_hours;
+    }
+    if (!sleep_quality) {
+      delete newLog.sleep_quality;
+    }
+    if (!exercise_minutes) {
+      delete newLog.exercise_minutes;
+    }
+    if (!water) {
+      delete newLog.water;
+    }
+
     LogsService.createNewLog(req.app.get("db"), newLog)
       .then((log) => {
         res
