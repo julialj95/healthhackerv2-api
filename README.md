@@ -1,26 +1,23 @@
-# Express Boilerplate!
+# MyHealthHacker Server
 
-This is a boilerplate project used for starting new projects!
+## Open Endpoints
 
-## Set up
+Open endpoints require no Authentication.
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+SignUp: POST /api/users/
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+Login : POST /api/authorization/login/
 
-## Scripts
+## Endpoints that require Authentication
 
-Start the application `npm start`
+Closed endpoints require a valid Token to be included in the header of the request.
 
-Start nodemon for the application `npm run dev`
+Get saved logs : GET /api/logs
 
-Run the tests `npm test`
+Post a new log: POST /api/logs
 
-## Deploying
+Get log by id: GET /api/logs/:log_id
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's main branch.
+Delete a log: DELETE /api/logs/:log_id
+
+Edit a log: PATCH /api/logs/:log_id
